@@ -1,27 +1,30 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
- 
-void *printMessage(void *msg);
- 
-void main()
-{
-	pthread_t thread1, thread2;
-	char *message = "Hello!";
- 
-	pthread_create(&thread1, NULL, printMessage, (void*) message);
-	pthread_create(&thread2, NULL, printMessage, (void*) message);
-	sleep(3);
- 
-printf("\nID of first thread is %lu\nID of process is %d\n", (unsigned long) thread1,getpid());
-	printf("\nID of second thread is %lu\nID of process is %d\n", (unsigned long) thread2,getpid());}
- 
-void *printMessage(void *msg)
-{
-	char *message;
-   	message = (char *) msg;
-	printf("\n%s\n", message);
 
-	pthread_exit(0);
+void *thread_function(void *arg);
+
+int main() {
+    pthread_t a_thread;
+    pthread_create(&a_thread, NULL, thread_function, NULL);
+    pthread_join(a_thread, NULL);
+
+    printf("Inside Main Program\n");
+    for (int j = 20; j < 25; j++) {
+        printf("%d\n", j);
+        sleep(1);
+    }
+
+    return 0;
+}
+
+void *thread_function(void *arg) {
+    printf("Inside Thread\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%d\n", i);
+        sleep(1);
+    }
+
+    return NULL;
 }
 
